@@ -1,0 +1,40 @@
+-- Create the Users table
+CREATE TABLE Users (
+    user_id SERIAL PRIMARY KEY,     -- Auto-incrementing primary key
+    name VARCHAR(100) NOT NULL,    -- User's first name
+    surname VARCHAR(100) NOT NULL, -- User's last name
+    dob DATE NOT NULL,             -- Date of birth
+    login VARCHAR(100) UNIQUE NOT NULL,  -- Unique login for the user
+    hash_password TEXT NOT NULL    -- Hashed password
+);
+
+-- Create the Books table
+CREATE TABLE Books (
+    book_id SERIAL PRIMARY KEY,    -- Auto-incrementing primary key
+    title VARCHAR(255) NOT NULL,  -- Book title
+    author VARCHAR(255) NOT NULL, -- Book author
+    year INT CHECK (year > 0) NOT NULL -- Year of publication
+);
+
+-- Create the Loans table
+CREATE TABLE Loans (
+    loan_id SERIAL PRIMARY KEY,    -- Auto-incrementing primary key
+    user_id INT NOT NULL,          -- Foreign key to Users
+    book_id INT NOT NULL,          -- Foreign key to Books
+    loan_date DATE NOT NULL,       -- Date the book was loaned
+    return_date DATE,              -- Date the book was returned (nullable)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES Books(book_id) ON DELETE CASCADE
+);
+
+-- Create the Reviews table
+CREATE TABLE Reviews (
+    review_id SERIAL PRIMARY KEY,  -- Auto-incrementing primary key
+    user_id INT NOT NULL,          -- Foreign key to Users
+    book_id INT NOT NULL,          -- Foreign key to Books
+    rating INT CHECK (rating >= 1 AND rating <= 5) NOT NULL, -- Rating between 1 and 5
+    comment TEXT,                  -- Optional user comment
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp of review creation
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES Books(book_id) ON DELETE CASCADE
+);
