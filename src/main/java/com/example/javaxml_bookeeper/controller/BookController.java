@@ -20,7 +20,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("/books")
     public ResponseEntity<List<Book>> getBooks() {
         List<Book> books = bookRepository.findAll(); // Fetch all books
         if (books.isEmpty()) {
