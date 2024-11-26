@@ -29,8 +29,11 @@ public class User {
     @Column(name = "hash_password", nullable = false)
     private String hashPassword;
 
-    @Column(name = "isadmin")
-    private Boolean isadmin;
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "username")
+    private String username;
 
     @OneToMany(mappedBy = "user")
     private Set<Review> reviews = new LinkedHashSet<>();
@@ -54,12 +57,12 @@ public class User {
         this.reviews = reviews;
     }
 
-    public Boolean getIsadmin() {
-        return isadmin;
+    public String getRole() {
+        return role;
     }
 
-    public void setIsadmin(Boolean isadmin) {
-        this.isadmin = isadmin;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getHashPassword() {
@@ -108,5 +111,13 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
