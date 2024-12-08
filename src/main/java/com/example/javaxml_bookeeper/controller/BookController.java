@@ -4,10 +4,7 @@ import com.example.javaxml_bookeeper.models.Book;
 import com.example.javaxml_bookeeper.repository.BookRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -53,4 +50,10 @@ public class BookController {
         }
     }
 
+    @GetMapping("/books/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable Integer id) {
+        return bookRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
