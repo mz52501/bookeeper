@@ -1,16 +1,23 @@
 package com.example.javaxml_bookeeper.controller;
 
 import com.example.javaxml_bookeeper.dto.UserDTO;
+import com.example.javaxml_bookeeper.models.User;
+import com.example.javaxml_bookeeper.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user")
 public class UserController {
+
+    private UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/profile")
     public ResponseEntity<UserDTO> getUserProfile() {
@@ -24,5 +31,25 @@ public class UserController {
 
         return ResponseEntity.ok(user);
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        System.out.println("Received user: " + user);
+        try {
+            // Verify if login already exists
+            if (userRepository.findByLogin(user.getLogin()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login already in use");
+            }
+
+            // Save user
+            userRepository.save(user);
+
+            return ResponseEntity.ok("User registered successfully");
+        } catch (Exception e) {
+            e.printStackTrace(); // Print error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
+    }
+
 }
 

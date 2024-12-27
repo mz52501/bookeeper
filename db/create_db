@@ -38,3 +38,7 @@ CREATE TABLE Reviews (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES Books(book_id) ON DELETE CASCADE
 );
+
+INSERT INTO users (login, hash_password, isadmin, name, surname, dob)
+VALUES ('admin', 'admin123', true, 'John', 'Doe', '1980-01-01');
+

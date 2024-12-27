@@ -29,7 +29,7 @@ public class User {
     @Column(name = "hash_password", nullable = false)
     private String hashPassword;
 
-    @Column(name = "isadmin")
+    @Column(name = "isadmin", nullable = false)
     private Boolean isadmin;
 
     @OneToMany(mappedBy = "user")
