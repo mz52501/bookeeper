@@ -29,9 +29,6 @@ public class User {
     @Column(name = "hash_password", nullable = false)
     private String hashPassword;
 
-    @Column(name = "isadmin", nullable = false)
-    private Boolean isadmin;
-
     @OneToMany(mappedBy = "user")
     private Set<Review> reviews = new LinkedHashSet<>();
 
@@ -52,14 +49,6 @@ public class User {
 
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
-    }
-
-    public Boolean getIsadmin() {
-        return isadmin;
-    }
-
-    public void setIsadmin(Boolean isadmin) {
-        this.isadmin = isadmin;
     }
 
     public String getHashPassword() {

@@ -1,7 +1,11 @@
 package com.example.javaxml_bookeeper.controller;
 
+import com.example.javaxml_bookeeper.dto.ReviewDTO;
 import com.example.javaxml_bookeeper.models.Book;
 import com.example.javaxml_bookeeper.repository.BookRepository;
+import com.example.javaxml_bookeeper.repository.ReviewRepository;
+import com.example.javaxml_bookeeper.service.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +15,15 @@ import java.util.List;
 @RestController
 public class BookController {
 
-    private final BookRepository bookRepository;
+    @Autowired
+    BookService bookService;
 
-    public BookController(BookRepository bookRepository) {
+    private final BookRepository bookRepository;
+    private final ReviewRepository reviewRepository;
+
+    public BookController(BookRepository bookRepository, ReviewRepository reviewRepository) {
         this.bookRepository = bookRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @GetMapping("/books")
@@ -56,4 +65,17 @@ public class BookController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PostMapping("/review")
+    public ResponseEntity<?> leaveReview(@RequestBody ReviewDTO reviewDTO) {
+        try {
+            bookService.leaveReviewComment(reviewDTO); // Handle both tasks in the service
+            return ResponseEntity.ok("Review updated");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error leaving review: " + e.getMessage());
+        }
+    }
+
+
+
 }
