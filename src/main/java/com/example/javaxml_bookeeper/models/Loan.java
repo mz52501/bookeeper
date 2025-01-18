@@ -29,6 +29,14 @@ public class Loan {
     @Column(name = "return_date")
     private LocalDate returnDate;
 
+    @Column(name = "is_returned")
+    private Boolean isReturned = false;
+
+    // Getters et Setters
+    public Boolean getIsReturned() { return isReturned; }
+
+    public void setIsReturned(Boolean isReturned) { this.isReturned = isReturned; }
+
     public LocalDate getReturnDate() {
         return returnDate;
     }

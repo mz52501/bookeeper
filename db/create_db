@@ -42,3 +42,6 @@ CREATE TABLE Reviews (
 INSERT INTO users (login, hash_password, isadmin, name, surname, dob)
 VALUES ('admin', 'admin123', true, 'John', 'Doe', '1980-01-01');
 
+ALTER TABLE loans ADD COLUMN is_returned BOOLEAN DEFAULT FALSE;
+
+
