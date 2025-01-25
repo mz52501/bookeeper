@@ -1,7 +1,9 @@
 package com.example.javaxml_bookeeper.service;
 
 import com.example.javaxml_bookeeper.dto.BookDTO;
+import com.example.javaxml_bookeeper.dto.LoanBookDTO;
 import com.example.javaxml_bookeeper.dto.ReviewDTO;
+import com.example.javaxml_bookeeper.dto.UserLoanBookDTO;
 import com.example.javaxml_bookeeper.models.Book;
 import com.example.javaxml_bookeeper.models.Loan;
 import com.example.javaxml_bookeeper.models.Review;
@@ -56,6 +58,25 @@ public class BookService {
             }
         }
         return books;
+    }
+
+    public List<UserLoanBookDTO> getUsersLoans() {
+        List<User> users = userRepository.findAll();
+        List<UserLoanBookDTO> userLoans = new ArrayList<>();
+        for(User user : users) {
+            List<LoanBookDTO> loansBooks = new ArrayList<>();
+            if(!user.getLoans().isEmpty()) {
+                for (Loan loan : user.getLoans()) {
+                    if(!loan.getIsReturned()) {
+                        LoanBookDTO dto = new LoanBookDTO(loan.getId(), loan.getLoanDate(), loan.getBook().getId(), loan.getBook().getTitle(), loan.getBook().getAuthor());
+                        loansBooks.add(dto);
+                    }
+                }
+                UserLoanBookDTO dto = new UserLoanBookDTO(user.getId(), user.getName(), user.getSurname(), user.getDob(), user.getLogin(), loansBooks);
+                userLoans.add(dto);
+            }
+        }
+        return userLoans;
     }
 
     public void leaveReviewComment(ReviewDTO reviewDTO) {

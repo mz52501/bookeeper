@@ -1,6 +1,7 @@
 package com.example.javaxml_bookeeper.controller;
 
 import com.example.javaxml_bookeeper.dto.BookDTO;
+import com.example.javaxml_bookeeper.dto.UserLoanBookDTO;
 import com.example.javaxml_bookeeper.models.Book;
 import com.example.javaxml_bookeeper.models.Loan;
 import com.example.javaxml_bookeeper.models.User;
@@ -75,6 +76,38 @@ public class LoanController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/usersLoans")
+    public ResponseEntity<List<UserLoanBookDTO>> usersLoans() {
+        List<UserLoanBookDTO> usersLoans = bookService.getUsersLoans();
+        if(usersLoans.isEmpty()) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(usersLoans);
+    }
+
+    @PutMapping("loans/{loanId}")
+    public ResponseEntity<String> markLoanAsReturned(@PathVariable Integer loanId) {
+        try {
+            Optional<Loan> optionalLoan = loanRepository.findById(loanId);
+
+            if (optionalLoan.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Loan not found with id: " + loanId);
+            }
+
+            Loan loan = optionalLoan.get();
+
+            if (loan.getIsReturned()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Loan is already marked as returned.");
+            }
+
+            loan.setIsReturned(true); // Update the isReturned field to true
+            loanRepository.save(loan); // Save the updated entity back to the database
+
+            return ResponseEntity.ok("Loan with id: " + loanId + " has been successfully marked as returned.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("An error occurred while updating the loan: " + e.getMessage());
         }
     }
 
