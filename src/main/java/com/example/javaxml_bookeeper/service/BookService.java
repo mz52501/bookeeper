@@ -37,7 +37,7 @@ public class BookService {
         List<Book> books = new ArrayList<>();
         if(user != null) {
             for (Loan loan : user.getLoans()) {
-                if (loan.getReturnDate() != null) {
+                if (loan.getIsReturned() == true) {
                     books.add(loan.getBook());
                 }
             }
@@ -50,7 +50,7 @@ public class BookService {
         List<Book> books = new ArrayList<>();
         if(user != null) {
             for (Loan loan : user.getLoans()) {
-                if (loan.getReturnDate() == null) {
+                if (loan.getIsReturned() == false) {
                     books.add(loan.getBook());
                 }
             }
